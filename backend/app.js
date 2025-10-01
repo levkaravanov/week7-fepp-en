@@ -2,7 +2,7 @@ require('dotenv').config()
 const express = require("express");
 const app = express();
 const productRouter = require("./routes/productRouter");
-const { unknownEndpoint,errorHandler } = require("./middleware/customMiddleware");
+const { unknownEndpoint, errorHandler } = require("./middleware/customMiddleware");
 const connectDB = require("./config/db");
 const cors = require("cors");
 
@@ -11,8 +11,8 @@ app.use(cors())
 app.use(express.json());
 
 connectDB();
- 
-// Use the jobRouter for all "/jobs" routes
+
+// Use the productRouter for all "/products" routes
 app.use("/api/products", productRouter);
 
 app.use(unknownEndpoint);
