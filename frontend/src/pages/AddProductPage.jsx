@@ -1,4 +1,4 @@
-const AddJobPage = () => {
+const AddProductPage = () => {
   
   const submitForm = (e) => {
     e.preventDefault();
@@ -8,15 +8,15 @@ const AddJobPage = () => {
 
   return (
     <div className="create">
-      <h2>Add a New Job</h2>
+      <h2>Add a New Product</h2>
       <form onSubmit={submitForm}>
-        <label>Job title:</label>
+        <label>Product title:</label>
         <input
           type="text"
           required
           value=""
         />
-        <label>Job type:</label>
+        <label>Product type:</label>
         <select >
           <option value="Full-Time">Full-Time</option>
           <option value="Part-Time">Part-Time</option>
@@ -24,7 +24,7 @@ const AddJobPage = () => {
           <option value="Internship">Internship</option>
         </select>
 
-        <label>Job Description:</label>
+        <label>Product Description:</label>
         <textarea
           required
           value=""
@@ -48,10 +48,10 @@ const AddJobPage = () => {
           required
           value=""
         />
-        <button>Add Job</button>
+        <button>Add Product</button>
       </form>
     </div>
   );
 };
 
-export default AddJobPage;
+export default AddProductPage;
