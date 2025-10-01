@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 const AddProductPage = () => {
   const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState("Electronics");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [stockQuantity, setStockQuantity] = useState("");
@@ -51,12 +51,12 @@ const AddProductPage = () => {
       title,
       category,
       description,
-      price,
-      stockQuantity,
+      price: Number(price),
+      stockQuantity: Number(stockQuantity),
       supplier: {
         name: supplierName,
-        email: supplierEmail,
-        phone: supplierPhone,
+        contactEmail: supplierEmail,
+        contactPhone: supplierPhone,
         rating: Number(supplierRating),
       },
     };
