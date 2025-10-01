@@ -1,38 +1,33 @@
-import { useState, useEffect } from 'react';
+import { Link } from "react-router-dom";
 
-const Navbar = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    // Check if user is authenticated on component mount
-    const token = localStorage.getItem('authToken');
-    setIsAuthenticated(!!token);
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem('authToken');
+const Navbar = ({ isAuthenticated, setIsAuthenticated }) => {
+  const handleClick = (e) => {
     setIsAuthenticated(false);
+    localStorage.removeItem("user");
   };
 
   return (
     <nav className="navbar">
-      <h1>Product Search</h1>
+      <Link to="/">
+        <h1>React Jobs</h1>
+      </Link>
       <div className="links">
-        <a href="/">Home</a>
-        <a href="/add-product">Add Product</a>
-        {!isAuthenticated ? (
-          <>
-            <a href="/login">Login</a>
-            <a href="/signup">Signup</a>
-          </>
-        ) : (
-          <button onClick={handleLogout} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer' }}>
-            Logout
-          </button>
+        {isAuthenticated && (
+          <div>
+            <Link to="/jobs/add-job">Add Job</Link>
+            <span>{JSON.parse(localStorage.getItem("user")).email}</span>
+            <button onClick={handleClick}>Log out</button>
+          </div>
+        )}
+        {!isAuthenticated && (
+          <div>
+            <Link to="/login">Login</Link>
+            <Link to="/signup">Signup</Link>
+          </div>
         )}
       </div>
     </nav>
   );
-}
+};
 
 export default Navbar;
