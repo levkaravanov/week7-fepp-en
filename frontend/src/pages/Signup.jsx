@@ -4,31 +4,35 @@ import { useNavigate } from "react-router-dom";
 
 const Signup = ({ setIsAuthenticated }) => {
   const navigate = useNavigate();
-  const name = useField("text");  
+  const name = useField("text");
   const email = useField("email");
   const password = useField("password");
-  const phoneNumber = useField("text");
-  const gender = useField("text");
-  const dateOfBirth = useField("date");
-  const membershipStatus = useField("text");
+  const role = useField("text");
+  const bio = useField("text");
 
   const { signup, error } = useSignup("/api/users/signup");
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    await signup({
+    const lastLogin = new Date().toISOString();
+    if (!role.value) {
+      window.alert("Please select a role");
+      return;
+    }
+    const result = await signup({
       email: email.value,
       password: password.value,
       name: name.value,
-      phone_number: phoneNumber.value,
-      gender: gender.value,
-      date_of_birth: dateOfBirth.value,
-      membership_status: membershipStatus.value,
+      role: role.value,
+      lastLogin,
+      bio: bio.value,
     });
-    if (!error) {
+    if (result?.ok) {
       console.log("success");
       setIsAuthenticated(true);
       navigate("/");
+    } else {
+      console.log(result?.error || error);
     }
   };
 
@@ -42,14 +46,15 @@ const Signup = ({ setIsAuthenticated }) => {
         <input {...email} />
         <label>Password:</label>
         <input {...password} />
-        <label>Phone Number:</label>
-        <input {...phoneNumber} />
-        <label>Gender:</label>
-        <input {...gender} />
-        <label>Date of Birth:</label>
-        <input {...dateOfBirth} />
-        <label>Membership Status:</label>
-        <input {...membershipStatus} />
+        <label>Role:</label>
+        <select value={role.value} onChange={role.onChange}>
+          <option value="" disabled>Select role</option>
+          <option value="Admin">Admin</option>
+          <option value="Seller">Seller</option>
+          <option value="Buyer">Buyer</option>
+        </select>
+        <label>Bio:</label>
+        <input {...bio} />
         <button>Sign up</button>
       </form>
     </div>

@@ -4,7 +4,7 @@ import { useState } from "react";
 // pages & components
 import Navbar from "./components/Navbar";
 import Home from "./pages/HomePage";
-import AddJobPage from "./pages/AddJobPage";
+import AddProductPage from "./pages/AddProductPage";
 import JobPage from "./pages/JobPage";
 import EditJobPage from "./pages/EditJobPage";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -16,20 +16,20 @@ const App = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     return user && user.token ? true : false;
   });
-  
+
 
   return (
     <div className="App">
       <BrowserRouter>
-      <Navbar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated}/>
+        <Navbar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
         <div className="content">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/jobs/:id" element={<JobPage isAuthenticated={isAuthenticated} />} />
             <Route
-              path="/jobs/add-job"
-              element={isAuthenticated ? <AddJobPage /> : <Navigate to="/signup" />}
-            />           
+              path="/products/add-product"
+              element={isAuthenticated ? <AddProductPage /> : <Navigate to="/signup" />}
+            />
             <Route
               path="/edit-job/:id"
               element={isAuthenticated ? <EditJobPage /> : <Navigate to="/signup" />}
