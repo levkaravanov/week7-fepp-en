@@ -7,22 +7,30 @@ export default function useSignup(url) {
   const signup = async (object) => {
     setIsLoading(true);
     setError(null);
-    const response = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(object),
-    });
-    const user = await response.json();
-
-    if (!response.ok) {
-      console.log(user.error);
-      setError(user.error);
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(object),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        const message = data?.error || "Signup failed";
+        console.log(message);
+        setError(message);
+        setIsLoading(false);
+        return { ok: false, error: message };
+      }
+      localStorage.setItem("user", JSON.stringify(data));
       setIsLoading(false);
-      return error;
+      return { ok: true, data };
+    } catch (e) {
+      const message = "Network error";
+      console.log(message);
+      setError(message);
+      setIsLoading(false);
+      return { ok: false, error: message };
     }
-
-    localStorage.setItem("user", JSON.stringify(user));
-    setIsLoading(false);
   };
 
   return { signup, isLoading, error };
