@@ -6,37 +6,54 @@
   font-family: "Quicksand";
   color: #333;
 }
+
 .navbar {
   padding: 20px;
   display: flex;
   align-items: center;
-  max-width: 600px;
+  justify-content: space-between;
+  max-width: 100%;
   margin: 0 auto;
   border-bottom: 1px solid #f2f2f2;
 }
+
 .navbar h1 {
   color: #f1356d;
 }
+
 .navbar .links {
   margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: nowrap;
 }
+
+.navbar .links>div {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .navbar a {
   margin-left: 16px;
   text-decoration: none;
   padding: 6px;
 }
+
 .navbar a:hover {
   color: #f1356d;
 }
+
 .content {
   max-width: 600px;
   margin: 40px auto;
   padding: 20px;
 }
 
-/* job previews / list */
+/* product previews / list */
 
-.job-list {
+.product-list {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -44,7 +61,7 @@
   background-color: #f9f9f9;
 }
 
-.job-preview {
+.product-preview {
   padding: 15px;
   border: 1px solid #ddd;
   border-radius: 5px;
@@ -53,39 +70,41 @@
   transition: box-shadow 0.3s ease;
 }
 
-.job-preview:hover {
+.product-preview:hover {
   box-shadow: 1px 3px 5px rgba(41, 20, 156, 0.1);
 }
 
-.job-preview h2 {
+.product-preview h2 {
   margin: 0 0 10px;
   font-size: 1.5em;
   color: #f1356d;
 }
 
-.job-preview p {
+.product-preview p {
   margin: 5px 0;
   color: #666;
 }
 
-.job-preview p span {
+.product-preview p span {
   font-weight: bold;
 }
 
-.job-preview a {
+.product-preview a {
   text-decoration: none;
 }
 
-/* job details page */
-.job-details h2 {
+/* product details page */
+.product-details h2 {
   font-size: 20px;
   color: #f1356d;
   margin-bottom: 10px;
 }
-.job-details div {
+
+.product-details div {
   margin: 20px 0;
 }
-.job-details button {
+
+.product-details button {
   background: #f1356d;
   color: #fff;
   border: 0;
@@ -94,21 +113,24 @@
   cursor: pointer;
 }
 
-/* create new job form */
+/* create new product form */
 .create {
   max-width: 400px;
   margin: 0 auto;
   text-align: center;
 }
+
 .create label {
   text-align: left;
   display: block;
 }
+
 .create h2 {
   font-size: 20px;
   color: #f1356d;
   margin-bottom: 30px;
 }
+
 .create input,
 .create textarea,
 .create select {
@@ -119,6 +141,7 @@
   box-sizing: border-box;
   display: block;
 }
+
 .create button {
   background: #f1356d;
   color: #fff;
@@ -128,15 +151,19 @@
   cursor: pointer;
 }
 
-.job-preview button {
-  margin: 5px; /* Adds space around the buttons */
-  border: 1px solid #f1356d; /* Adds a black border */
-  padding: 10px; /* Adds padding inside the buttons */
-  border-radius: 5px; /* Optional: Adds rounded corners */
+.product-preview button {
+  margin: 5px;
+  /* Adds space around the buttons */
+  border: 1px solid #f1356d;
+  /* Adds a black border */
+  padding: 10px;
+  /* Adds padding inside the buttons */
+  border-radius: 5px;
+  /* Optional: Adds rounded corners */
 }
 
 
-/* Style for the "Add Job" link */
+/* Style for the "Add Product" link */
 nav .links a {
   color: #f1356d;
   text-decoration: none;
@@ -153,10 +180,13 @@ nav .links span {
 
 /* Style for the "Log out" button */
 nav .links button {
-  margin: 5px; /* Adds space around the buttons */
-  border: 1px solid #f1356d; /* Adds a black border */
-  padding: 10px; /* Adds padding inside the buttons */
-  border-radius: 5px; /* Optional: Adds rounded corners */
+  margin: 5px;
+  /* Adds space around the buttons */
+  border: 1px solid #f1356d;
+  /* Adds a black border */
+  padding: 10px;
+  /* Adds padding inside the buttons */
   border-radius: 5px;
-} 
-
+  /* Optional: Adds rounded corners */
+  border-radius: 5px;
+}

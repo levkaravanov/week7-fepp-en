@@ -1,165 +1,3 @@
-// import { useState, useEffect } from "react";
-// import { useParams, useNavigate } from "react-router-dom";
-
-// const EditProductPage = () => {
-//   const [product, setproduct] = useState(null); // Initialize job state
-//   const [loading, setLoading] = useState(true); // Loading state
-//   const [error, setError] = useState(null); // Error state
-//   const { id } = useParams();
-
-//   // Declare state variables for form fields
-//   const [title, setTitle] = useState("");
-//   const [type, setType] = useState("");
-//   const [description, setDescription] = useState("");
-//   const [companyName, setCompanyName] = useState("");
-//   const [contactEmail, setContactEmail] = useState("");
-//   const [contactPhone, setContactPhone] = useState("");
-
-//   const user = JSON.parse(localStorage.getItem("user"));
-//   const token = user ? user.token : null;
-
-//   const navigate = useNavigate();
-
-//   const updateProduct = async (product) => {
-//     try {
-//       console.log("Updating product:", product);
-//       const res = await fetch(`/api/product/${product.id}`, {
-//         method: "PUT",
-//         headers: {
-//           "Content-Type": "application/json",
-//           Authorization: `Bearer ${token}`,
-//         },
-//         body: JSON.stringify(product),
-//       });
-//       if (!res.ok) throw new Error("Failed to update product");
-//       return res.ok;
-//     } catch (error) {
-//       console.error("Error updating product:", error);
-//       return false;
-//     }
-//   };
-
-//   // Fetch job data
-//   useEffect(() => {
-//     const fetchProduct = async () => {
-//       try {
-//         const res = await fetch(`/api/products/${id}`);
-//         if (!res.ok) {
-//           throw new Error("Network response was not ok");
-//         }
-//         const data = await res.json();
-//         setJob(data); // Set the job data
-
-//         // Initialize form fields with fetched job data
-//         setTitle(data.title);
-//         setType(data.type);
-//         setDescription(data.description);
-//         setCompanyName(data.company.name);
-//         setContactEmail(data.company.contactEmail);
-//         setContactPhone(data.company.contactPhone);
-//       } catch (error) {
-//         console.error("Failed to fetch product:", error);
-//         setError(error.message);
-//       } finally {
-//         setLoading(false); // Stop loading after fetch
-//       }
-//     };
-
-//     fetchProduct();
-//   }, [id]);
-
-//   // Handle form submission
-//   const submitForm = async (e) => {
-//     e.preventDefault();
-
-//     const updatedProduct = {
-//       id,
-//       title,
-//       type,
-//       description,
-//       company: {
-//         name: companyName,
-//         contactEmail,
-//         contactPhone,
-//       },
-//     };
-
-//     const success = await updateProduct(updatedProduct);
-//     if (success) {
-//       console.log("Product Updated Successfully");
-//       navigate(`/products/${id}`);
-//     } else {
-//       console.error("Failed to update the product");
-//     }
-//   };
-
-//   return (
-//     <div className="create">
-//       <h2>Update Product</h2>
-//       {loading ? (
-//         <p>Loading...</p>
-//       ) : error ? (
-//         <p>{error}</p>
-//       ) : (
-//         <form onSubmit={submitForm}>
-//           <label>Product title:</label>
-//           <input
-//             type="text"
-//             required
-//             value={title}
-//             onChange={(e) => setTitle(e.target.value)}
-//           />
-//           <label>Product type:</label>
-//           <select value={type} onChange={(e) => setType(e.target.value)}>
-//             <option value="Full-Time">Full-Time</option>
-//             <option value="Part-Time">Part-Time</option>
-//             <option value="Remote">Remote</option>
-//             <option value="Internship">Internship</option>
-//           </select>
-
-//           <label>Product Description:</label>
-//           <textarea
-//             required
-//             value={description}
-//             onChange={(e) => setDescription(e.target.value)}
-//           ></textarea>
-//           <label>Company Name:</label>
-//           <input
-//             type="text"
-//             required
-//             value={companyName}
-//             onChange={(e) => setCompanyName(e.target.value)}
-//           />
-//           <label>Contact Email:</label>
-//           <input
-//             type="text"
-//             required
-//             value={contactEmail}
-//             onChange={(e) => setContactEmail(e.target.value)}
-//           />
-//           <label>Contact Phone:</label>
-//           <input
-//             type="text"
-//             required
-//             value={contactPhone}
-//             onChange={(e) => setContactPhone(e.target.value)}
-//           />
-//           <button>Update Product</button>
-//         </form>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default EditProductPage;
-
-
-
-
-
-
-
-
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
@@ -180,13 +18,26 @@ const EditProductPage = () => {
   const [price, setPrice] = useState("");
   const [stockQuantity, setStockQuantity] = useState("");
   const [supplierName, setSupplierName] = useState("");
-  const [contactEmail, setContactEmail] = useState("");
-  const [contactPhone, setContactPhone] = useState("");
+  const [supplierEmail, setSupplierEmail] = useState("");
+  const [supplierPhone, setSupplierPhone] = useState("");
   const [rating, setRating] = useState(3);
+  const [canEdit, setCanEdit] = useState(true);
+  const [showNoAccessModal, setShowNoAccessModal] = useState(false);
 
   // auth token (if available)
   const user = typeof window !== "undefined" ? JSON.parse(localStorage.getItem("user")) : null;
   const token = user ? user.token : null;
+
+  const getUserIdFromToken = (jwtToken) => {
+    if (!jwtToken) return null;
+    try {
+      const base64Payload = jwtToken.split(".")[1];
+      const json = JSON.parse(atob(base64Payload));
+      return json?._id || json?.id || null;
+    } catch (_e) {
+      return null;
+    }
+  };
 
   // fetch product on mount
   useEffect(() => {
@@ -212,9 +63,18 @@ const EditProductPage = () => {
         setPrice(data.price != null ? String(data.price) : "");
         setStockQuantity(data.stockQuantity != null ? String(data.stockQuantity) : "");
         setSupplierName(data.supplier?.name ?? "");
-        setContactEmail(data.supplier?.contactEmail ?? "");
-        setContactPhone(data.supplier?.contactPhone ?? "");
+        setSupplierEmail(data.supplier?.contactEmail ?? "");
+        setSupplierPhone(data.supplier?.contactPhone ?? "");
         setRating(data.supplier?.rating ?? 3);
+
+        // determine edit permission (owner only)
+        const currentUserId = getUserIdFromToken(token);
+        const ownerId = data.user_id || data.userId || null;
+        const allowed = ownerId ? currentUserId === ownerId : true;
+        setCanEdit(allowed);
+        if (!allowed) {
+          setShowNoAccessModal(true);
+        }
       } catch (err) {
         console.error("Fetch product error:", err);
         setError(err.message || "Failed to fetch product");
@@ -225,21 +85,6 @@ const EditProductPage = () => {
 
     fetchProduct();
   }, [id, token]);
-
-  // basic client-side validation
-  const validate = () => {
-    if (!title.trim()) return "Title is required";
-    if (!category.trim()) return "Category is required";
-    if (!description.trim()) return "Description is required";
-    if (price === "" || Number.isNaN(Number(price)) || Number(price) < 0) return "Price must be a number >= 0";
-    if (stockQuantity === "" || !Number.isInteger(Number(stockQuantity)) || Number(stockQuantity) < 0)
-      return "Stock quantity must be an integer >= 0";
-    if (!supplierName.trim()) return "Supplier name is required";
-    if (!/^\S+@\S+\.\S+$/.test(contactEmail)) return "Invalid contact email";
-    if (!/^\+?[0-9\- ]{7,20}$/.test(contactPhone)) return "Invalid contact phone";
-    if (!(rating >= 1 && rating <= 5)) return "Rating must be between 1 and 5";
-    return null;
-  };
 
   const updateProduct = async (payload) => {
     try {
@@ -254,14 +99,15 @@ const EditProductPage = () => {
 
       if (!res.ok) {
         const text = await res.text();
-        throw new Error(text || "Failed to update product");
+        // Return structured error with status for better UX
+        return { ok: false, status: res.status, error: text || "Failed to update product" };
       }
 
       const updated = await res.json();
       return { ok: true, data: updated };
     } catch (err) {
       console.error("Update error:", err);
-      return { ok: false, error: err.message || "Update failed" };
+      return { ok: false, status: 0, error: err.message || "Update failed" };
     }
   };
 
@@ -269,9 +115,9 @@ const EditProductPage = () => {
     e.preventDefault();
     setError(null);
 
-    const clientValidationError = validate();
-    if (clientValidationError) {
-      setError(clientValidationError);
+    if (!canEdit) {
+      setError("You cannot edit this product because you are not the owner.");
+      setShowNoAccessModal(true);
       return;
     }
 
@@ -283,8 +129,8 @@ const EditProductPage = () => {
       stockQuantity: Number(parseInt(stockQuantity, 10)),
       supplier: {
         name: supplierName.trim(),
-        contactEmail: contactEmail.trim(),
-        contactPhone: contactPhone.trim(),
+        contactEmail: supplierEmail.trim(),
+        contactPhone: supplierPhone.trim(),
         rating: Number(rating),
       },
     };
@@ -294,10 +140,15 @@ const EditProductPage = () => {
     setSaving(false);
 
     if (result.ok) {
-      // you can update local state or redirect
       navigate(`/products/${id}`);
     } else {
-      setError(result.error || "Failed to update product");
+      if (result.status === 404) {
+        setError("Product not found or you do not have permission to edit it.");
+      } else if (result.status === 401 || result.status === 403) {
+        setError("You must be logged in and own this product to edit it.");
+      } else {
+        setError(result.error || "Failed to update product");
+      }
     }
   };
 
@@ -309,16 +160,21 @@ const EditProductPage = () => {
       <h2>Update Product</h2>
 
       {error && product && <p style={{ color: "red" }}>{error}</p>}
+      {!canEdit && (
+        <p style={{ color: "#c00", background: "#ffecec", padding: "8px 12px", borderRadius: 6 }}>
+          You are viewing a product that you do not own. Editing is disabled.
+        </p>
+      )}
 
       <form onSubmit={submitForm}>
         <label>Product title:</label>
-        <input type="text" required value={title} onChange={(e) => setTitle(e.target.value)} />
+        <input type="text" required value={title} onChange={(e) => setTitle(e.target.value)} disabled={!canEdit} />
 
         <label>Category:</label>
-        <input type="text" required value={category} onChange={(e) => setCategory(e.target.value)} />
+        <input type="text" required value={category} onChange={(e) => setCategory(e.target.value)} disabled={!canEdit} />
 
         <label>Product Description:</label>
-        <textarea required value={description} onChange={(e) => setDescription(e.target.value)} />
+        <textarea required value={description} onChange={(e) => setDescription(e.target.value)} disabled={!canEdit} />
 
         <label>Price (USD):</label>
         <input
@@ -328,6 +184,7 @@ const EditProductPage = () => {
           required
           value={price}
           onChange={(e) => setPrice(e.target.value)}
+          disabled={!canEdit}
         />
 
         <label>Stock Quantity:</label>
@@ -338,21 +195,22 @@ const EditProductPage = () => {
           required
           value={stockQuantity}
           onChange={(e) => setStockQuantity(e.target.value)}
+          disabled={!canEdit}
         />
 
         <hr />
 
         <label>Supplier Name:</label>
-        <input type="text" required value={supplierName} onChange={(e) => setSupplierName(e.target.value)} />
+        <input type="text" required value={supplierName} onChange={(e) => setSupplierName(e.target.value)} disabled={!canEdit} />
 
-        <label>Contact Email:</label>
-        <input type="email" required value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} />
+        <label>Supplier Email:</label>
+        <input type="email" required value={supplierEmail} onChange={(e) => setSupplierEmail(e.target.value)} disabled={!canEdit} />
 
-        <label>Contact Phone:</label>
-        <input type="tel" required value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} />
+        <label>Supplier Phone:</label>
+        <input type="tel" required value={supplierPhone} onChange={(e) => setSupplierPhone(e.target.value)} disabled={!canEdit} />
 
         <label>Supplier Rating (1-5):</label>
-        <select value={rating} onChange={(e) => setRating(Number(e.target.value))}>
+        <select value={rating} onChange={(e) => setRating(Number(e.target.value))} disabled={!canEdit}>
           <option value={1}>1</option>
           <option value={2}>2</option>
           <option value={3}>3</option>
@@ -360,10 +218,23 @@ const EditProductPage = () => {
           <option value={5}>5</option>
         </select>
 
-        <button type="submit" disabled={saving}>
+        <button type="submit" disabled={saving || !canEdit} aria-disabled={!canEdit}>
           {saving ? "Saving..." : "Update Product"}
         </button>
       </form>
+
+      {showNoAccessModal && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.4)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000 }} onClick={() => setShowNoAccessModal(false)}>
+          <div style={{ background: "#fff", padding: 20, borderRadius: 8, width: "min(92vw, 420px)", boxShadow: "0 10px 30px rgba(0,0,0,0.2)" }} onClick={(e) => e.stopPropagation()}>
+            <h3 style={{ marginTop: 0 }}>Editing disabled</h3>
+            <p style={{ marginBottom: 16 }}>You cannot edit this product because you are not the owner.</p>
+            <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+              <button onClick={() => setShowNoAccessModal(false)}>Close</button>
+              <button onClick={() => navigate(`/products/${id}`)}>Go to product</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -9,12 +9,12 @@ const Navbar = ({ isAuthenticated, setIsAuthenticated }) => {
   return (
     <nav className="navbar">
       <Link to="/">
-        <h1>React Jobs</h1>
+        <h1>React Products</h1>
       </Link>
       <div className="links">
         {isAuthenticated && (
           <div>
-            <Link to="/jobs/add-job">Add Job</Link>
+            <Link to="/products/add-product">Add Product</Link>
             <span>{(() => {
               try {
                 const raw = localStorage.getItem("user");

@@ -22,7 +22,7 @@ const Home = () => {
         setError(err.message);
       }
     };
-    // setTimeout(() => {fetchJobs();}, 1000); // Delay of 1 second
+    // setTimeout(() => {fetchProducts();}, 1000); // Delay of 1 second
     fetchProducts();
   }, []);
 
