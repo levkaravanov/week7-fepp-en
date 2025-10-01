@@ -6,7 +6,7 @@ import Navbar from "./components/Navbar";
 import Home from "./pages/HomePage";
 import AddJobPage from "./pages/AddJobPage";
 import JobPage from "./pages/JobPage";
-import EditProductPage from "./pages/EditProductPage";
+import EditJobPage from "./pages/EditJobPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -32,7 +32,7 @@ const App = () => {
             />           
             <Route
               path="/edit-job/:id"
-              element={isAuthenticated ? <EditProductPage /> : <Navigate to="/signup" />}
+              element={isAuthenticated ? <EditJobPage /> : <Navigate to="/signup" />}
             />
             <Route
               path="/signup"
