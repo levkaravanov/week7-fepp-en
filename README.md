@@ -18,3 +18,6 @@
 
 4. **Access the App**  
    Open your browser and visit: [http://localhost:3000](http://localhost:3000)
+
+5. **deployment  link**
+open your postman and post : https://group-7-m9yf.onrender.com/
